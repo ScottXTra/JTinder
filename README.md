@@ -16,4 +16,4 @@ Project Discription: I proxied the tinder app to find the endpoints and protocol
 <p>Super Like</p>
 <p>Get Number Of Likes You Have Received</p>
 <h1>Working POC (Oct 13th 2019)</h1>
-<img src="https://user-images.githubusercontent.com/39224367/66710262-bc0b6a80-ed42-11e9-9dc9-b33bc4fa8c04.gif" alt="gif" width="500" height="600">
+<img src="https://user-images.githubusercontent.com/39224367/66710262-bc0b6a80-ed42-11e9-9dc9-b33bc4fa8c04.gif" alt="gif" width="500" height="300">
