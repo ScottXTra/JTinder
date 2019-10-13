@@ -171,4 +171,60 @@ public class APIMethods {
         }
 		return rtnList;
 	}
+	public static boolean swipeLeft(String userID,String api_token) throws IOException {
+		 URL obj = new URL("https://api.gotinder.com/pass/" + userID);
+	        HttpURLConnection  connection = (HttpURLConnection) obj.openConnection();
+	        connection.setConnectTimeout(1000);
+	        connection.setRequestMethod( "GET" );
+	        //Request header
+	        connection.setRequestProperty("platform","android");
+			connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
+			connection.setRequestProperty("os-version","24");
+			connection.setRequestProperty("app-version","3544");
+			connection.setRequestProperty("Content-Type","application/json");
+			connection.setRequestProperty("Accept-Language","en");
+			connection.setRequestProperty("x-supported-image-formats","webp");
+			connection.setRequestProperty("X-Auth-Token",api_token);
+	        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	        String inputLine;
+	        StringBuffer response = new StringBuffer();
+	        while ((inputLine = in.readLine()) != null) {
+	            response.append(inputLine);
+	        }
+	        in.close();
+	        //NOT A VERY GOOD CHECK WILL FIX LATER
+	        if(response.toString().contains("\"status\":200")) {
+	        	return true;
+	        }else {
+	        	return false;
+	        }
+	}
+	public static boolean swipeRight(String userID,String api_token) throws IOException {
+		 URL obj = new URL("https://api.gotinder.com/like/" + userID);
+	        HttpURLConnection  connection = (HttpURLConnection) obj.openConnection();
+	        connection.setConnectTimeout(1000);
+	        connection.setRequestMethod( "GET" );
+	        //Request header
+	        connection.setRequestProperty("platform","android");
+			connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
+			connection.setRequestProperty("os-version","24");
+			connection.setRequestProperty("app-version","3544");
+			connection.setRequestProperty("Content-Type","application/json");
+			connection.setRequestProperty("Accept-Language","en");
+			connection.setRequestProperty("x-supported-image-formats","webp");
+			connection.setRequestProperty("X-Auth-Token",api_token);
+	        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	        String inputLine;
+	        StringBuffer response = new StringBuffer();
+	        while ((inputLine = in.readLine()) != null) {
+	            response.append(inputLine);
+	        }
+	        in.close();
+	        //NOT A VERY GOOD CHECK WILL FIX LATER
+	        if(response.toString().contains("\"status\":200")) {
+	        	return true;
+	        }else {
+	        	return false;
+	        }
+	}
 }
