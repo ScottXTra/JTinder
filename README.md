@@ -6,7 +6,7 @@ Project Discription: I proxied the tinder app to find the endpoints and protocol
 <p>Download User Data and Photos</p>
 <p>Swipe Left</p>
 <p>Swipe Right</p>
-<h1>Planed Features</h1>
+<h1>Planned Features</h1>
 <p>Login With Facebook</p>
 <p>Send Message To User ID</p>
 <p>Get Messages From User ID</p>
