@@ -1,11 +1,11 @@
 <h1>JTinder API</h1>
 Project Discription: I proxied the tinder app to find the endpoints and protocol. This repo is a work in progress of an api built off those endpoints.
 <h1>Current Features</h1>
-<p>3 Step SMS Login
-Get Recommend Matches
-Download User Data and Photos
-Swipe Left
-Swipe Right</p>
+<p>3 Step SMS Login</p>
+<p>Get Recommend Matches</p>
+<p>Download User Data and Photos</p>
+<p>Swipe Left</p>
+<p>Swipe Right</p>
 <h1>Planed Features</h1>
 <p>Login With Facebook</p>
 <p>Send Message To User ID</p>
