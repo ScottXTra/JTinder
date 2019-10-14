@@ -3,6 +3,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class APIMethods {
 	    in.close();
 	    JSONObject jobj = new JSONObject(response.toString());
 	    try {
-	    	jobj.getJSONObject("data").get("otp_length").toString().equals("6");
+	    	jobj.getJSONObject("data").get("sms_sent").toString().equals("true");
 	    	System.out.println("SMS SEND PASSED!");
 	    }catch(Exception e) {
 	    	System.out.println("SMS SEND FAILED!");
@@ -120,7 +121,7 @@ public class APIMethods {
 	    }
 	}
 	//WORK IN PROGRESS
-	public static ArrayList<userData> dowloadRecUsers(String api_token) throws IOException
+	public static ArrayList<userData> getRecUsers(String api_token) throws IOException
 
 	{
         URL obj = new URL("https://api.gotinder.com/v2/recs/core?locale=en");
@@ -226,5 +227,50 @@ public class APIMethods {
 	        }else {
 	        	return false;
 	        }
+	}
+	public static userData getUserData(String userID,String api_token) throws IOException {
+		userData user = new userData();
+		URL obj = new URL("https://api.gotinder.com/user/"+userID );
+        HttpURLConnection  connection = (HttpURLConnection) obj.openConnection();
+        connection.setConnectTimeout(1000);
+        connection.setRequestMethod( "GET" );
+        //Request header
+        connection.setRequestProperty("platform","android");
+		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
+		connection.setRequestProperty("os-version","24");
+		connection.setRequestProperty("app-version","3544");
+		connection.setRequestProperty("Content-Type","application/json");
+		connection.setRequestProperty("Accept-Language","en");
+		connection.setRequestProperty("x-supported-image-formats","webp");
+		connection.setRequestProperty("X-Auth-Token",api_token);
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        JSONObject jobj = new JSONObject(response.toString());
+        JSONObject results = jobj.getJSONObject("results");
+        user.ID = results.getString("_id");
+        user.bio = results.getString("bio");
+        user.birthDay = results.getString("birth_date");
+        user.name = results.getString("name");
+        JSONArray photos = results.getJSONArray("photos");
+        for (int j = 0; j <  photos.length(); j++) {
+        	JSONObject photo =  photos.getJSONObject(j);
+        	user.photoUrls.add(photo.getString("url"));
+   	 	}
+        for (int j = 0; j <  photos.length(); j++) {
+   		 	JSONObject photo =  photos.getJSONObject(j);
+   		 	user.photoUrls.add(photo.getString("url"));
+   	 	}
+        try {
+   		 	user.gender = Integer.parseInt(results.getString("gender"));
+   	 	}catch(Exception h) {
+   	 		user.gender = -1;
+   	 	}
+		return user;
+		
 	}
 }
