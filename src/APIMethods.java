@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -272,5 +273,27 @@ public class APIMethods {
    	 	}
 		return user;
 		
+	}
+	public static void updateLocation(String api_token,float lat,float lon) throws IOException {
+		String urlParameters  = "{\"lat\":\""+lat+"\",\"lon\": \""+lon+"\", \"force_fetch_resources\":\"true\"}";
+		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
+		String request        = "https://api.gotinder.com/v2/meta";
+		URL    url            = new URL( request );
+		HttpURLConnection connection= (HttpURLConnection) url.openConnection();           
+		connection.setDoOutput( true );
+		connection.setInstanceFollowRedirects( false );
+		connection.setRequestMethod( "POST" );
+		connection.setRequestProperty("platform","android");
+		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
+		connection.setRequestProperty("os-version","24");
+		connection.setRequestProperty("app-version","3544");
+		connection.setRequestProperty("Content-Type","application/json");
+		connection.setRequestProperty("Accept-Language","en");
+		connection.setRequestProperty("x-supported-image-formats","webp");
+		connection.setRequestProperty("X-Auth-Token",api_token);
+		connection.setUseCaches( false );
+		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+			   wr.write( postData );
+		}
 	}
 }
