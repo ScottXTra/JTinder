@@ -122,6 +122,7 @@ public class APIMethods {
 	    }
 	}
 	//WORK IN PROGRESS
+	//GETS list of rec users that tinder thinks you will match with
 	public static ArrayList<userData> getRecUsers(String api_token) throws IOException
 
 	{
@@ -173,6 +174,7 @@ public class APIMethods {
         }
 		return rtnList;
 	}
+	//Swipes left on a given user ID
 	public static boolean swipeLeft(String userID,String api_token) throws IOException {
 		 URL obj = new URL("https://api.gotinder.com/pass/" + userID);
 	        HttpURLConnection  connection = (HttpURLConnection) obj.openConnection();
@@ -201,6 +203,8 @@ public class APIMethods {
 	        	return false;
 	        }
 	}
+	
+	//Swipes right on a given user ID
 	public static boolean swipeRight(String userID,String api_token) throws IOException {
 		 URL obj = new URL("https://api.gotinder.com/like/" + userID);
 	        HttpURLConnection  connection = (HttpURLConnection) obj.openConnection();
@@ -229,6 +233,7 @@ public class APIMethods {
 	        	return false;
 	        }
 	}
+	//Grabs data from user ID
 	public static userData getUserData(String userID,String api_token) throws IOException {
 		userData user = new userData();
 		URL obj = new URL("https://api.gotinder.com/user/"+userID );
@@ -274,6 +279,8 @@ public class APIMethods {
 		return user;
 		
 	}
+	
+	//Updates tinder location (what is used to find local matches)
 	public static void updateLocation(String api_token,float lat,float lon) throws IOException {
 		String urlParameters  = "{\"lat\":\""+lat+"\",\"lon\": \""+lon+"\", \"force_fetch_resources\":\"true\"}";
 		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
@@ -295,5 +302,43 @@ public class APIMethods {
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
 			   wr.write( postData );
 		}
+	}
+	//Downloads all unblurred likes that are displayed on (likes you) screen in app
+	public static ArrayList<String> getUnbluredLikes(String api_token) throws IOException{
+		ArrayList<String> photoUrls = new ArrayList<String>();
+		URL obj = new URL("https://api.gotinder.com/v2/fast-match/teasers");
+        HttpURLConnection  connection = (HttpURLConnection) obj.openConnection();
+        connection.setConnectTimeout(1000);
+        connection.setRequestMethod( "GET" );
+        //Request header
+        connection.setRequestProperty("platform","android");
+		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
+		connection.setRequestProperty("os-version","24");
+		connection.setRequestProperty("app-version","3544");
+		connection.setRequestProperty("Content-Type","application/json");
+		connection.setRequestProperty("Accept-Language","en");
+		connection.setRequestProperty("x-supported-image-formats","webp");
+		connection.setRequestProperty("X-Auth-Token",api_token);
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        JSONObject jobj = new JSONObject(response.toString());
+        JSONObject data = jobj.getJSONObject("data");
+        JSONArray results = data.getJSONArray("results");
+        
+        for (int i = 0; i < results.length(); i++) {
+       	 	JSONObject userOBJECT = results.getJSONObject(i);
+       	 	JSONObject user = userOBJECT.getJSONObject("user");
+       	 	JSONArray photos = user.getJSONArray("photos");
+       	 	photoUrls.add(photos.getJSONObject(0).getString("url"));
+       	 	//for (int j = 0; j < photos.length(); j++) {
+       	 		//photoUrls.add(photos.getJSONObject(j).getString("url"));
+       	 	//}
+        }
+		return photoUrls;
 	}
 }
