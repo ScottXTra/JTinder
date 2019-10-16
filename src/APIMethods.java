@@ -94,13 +94,7 @@ public class APIMethods {
 		connection.setDoOutput( true );
 		connection.setInstanceFollowRedirects( false );
 		connection.setRequestMethod( "POST" );
-		connection.setRequestProperty("platform","android");
-		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
-		connection.setRequestProperty("os-version","24");
-		connection.setRequestProperty("app-version","3544");
-		connection.setRequestProperty("Content-Type","application/json");
-		connection.setRequestProperty("Accept-Language","en");
-		connection.setRequestProperty("x-supported-image-formats","webp");
+		connection =connectionPropertys(connection);
 		connection.setUseCaches( false );
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
 			   wr.write( postData );
@@ -131,13 +125,7 @@ public class APIMethods {
         connection.setConnectTimeout(1000);
         connection.setRequestMethod( "GET" );
         //Request header
-        connection.setRequestProperty("platform","android");
-		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
-		connection.setRequestProperty("os-version","24");
-		connection.setRequestProperty("app-version","3544");
-		connection.setRequestProperty("Content-Type","application/json");
-		connection.setRequestProperty("Accept-Language","en");
-		connection.setRequestProperty("x-supported-image-formats","webp");
+        connection =connectionPropertys(connection);
 		connection.setRequestProperty("X-Auth-Token",api_token);
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;
@@ -181,13 +169,7 @@ public class APIMethods {
 	        connection.setConnectTimeout(1000);
 	        connection.setRequestMethod( "GET" );
 	        //Request header
-	        connection.setRequestProperty("platform","android");
-			connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
-			connection.setRequestProperty("os-version","24");
-			connection.setRequestProperty("app-version","3544");
-			connection.setRequestProperty("Content-Type","application/json");
-			connection.setRequestProperty("Accept-Language","en");
-			connection.setRequestProperty("x-supported-image-formats","webp");
+	        connection =connectionPropertys(connection);
 			connection.setRequestProperty("X-Auth-Token",api_token);
 	        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 	        String inputLine;
@@ -211,13 +193,7 @@ public class APIMethods {
 	        connection.setConnectTimeout(1000);
 	        connection.setRequestMethod( "GET" );
 	        //Request header
-	        connection.setRequestProperty("platform","android");
-			connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
-			connection.setRequestProperty("os-version","24");
-			connection.setRequestProperty("app-version","3544");
-			connection.setRequestProperty("Content-Type","application/json");
-			connection.setRequestProperty("Accept-Language","en");
-			connection.setRequestProperty("x-supported-image-formats","webp");
+	        connection =connectionPropertys(connection);
 			connection.setRequestProperty("X-Auth-Token",api_token);
 	        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 	        String inputLine;
@@ -241,13 +217,7 @@ public class APIMethods {
         connection.setConnectTimeout(1000);
         connection.setRequestMethod( "GET" );
         //Request header
-        connection.setRequestProperty("platform","android");
-		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
-		connection.setRequestProperty("os-version","24");
-		connection.setRequestProperty("app-version","3544");
-		connection.setRequestProperty("Content-Type","application/json");
-		connection.setRequestProperty("Accept-Language","en");
-		connection.setRequestProperty("x-supported-image-formats","webp");
+        connection =connectionPropertys(connection);
 		connection.setRequestProperty("X-Auth-Token",api_token);
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;
@@ -290,13 +260,7 @@ public class APIMethods {
 		connection.setDoOutput( true );
 		connection.setInstanceFollowRedirects( false );
 		connection.setRequestMethod( "POST" );
-		connection.setRequestProperty("platform","android");
-		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
-		connection.setRequestProperty("os-version","24");
-		connection.setRequestProperty("app-version","3544");
-		connection.setRequestProperty("Content-Type","application/json");
-		connection.setRequestProperty("Accept-Language","en");
-		connection.setRequestProperty("x-supported-image-formats","webp");
+		connection =connectionPropertys(connection);
 		connection.setRequestProperty("X-Auth-Token",api_token);
 		connection.setUseCaches( false );
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
@@ -311,13 +275,7 @@ public class APIMethods {
         connection.setConnectTimeout(1000);
         connection.setRequestMethod( "GET" );
         //Request header
-        connection.setRequestProperty("platform","android");
-		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
-		connection.setRequestProperty("os-version","24");
-		connection.setRequestProperty("app-version","3544");
-		connection.setRequestProperty("Content-Type","application/json");
-		connection.setRequestProperty("Accept-Language","en");
-		connection.setRequestProperty("x-supported-image-formats","webp");
+        connection =connectionPropertys(connection);
 		connection.setRequestProperty("X-Auth-Token",api_token);
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;
@@ -349,13 +307,7 @@ public class APIMethods {
         connection.setConnectTimeout(1000);
         connection.setRequestMethod( "GET" );
         //Request header
-        connection.setRequestProperty("platform","android");
-		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
-		connection.setRequestProperty("os-version","24");
-		connection.setRequestProperty("app-version","3544");
-		connection.setRequestProperty("Content-Type","application/json");
-		connection.setRequestProperty("Accept-Language","en");
-		connection.setRequestProperty("x-supported-image-formats","webp");
+        connection =connectionPropertys(connection);
 		connection.setRequestProperty("X-Auth-Token",api_token);
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;
@@ -382,13 +334,7 @@ public class APIMethods {
 		connection.setDoOutput( true );
 		connection.setInstanceFollowRedirects( false );
 		connection.setRequestMethod( "POST" );
-		connection.setRequestProperty("platform","android");
-		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
-		connection.setRequestProperty("os-version","24");
-		connection.setRequestProperty("app-version","3544");
-		connection.setRequestProperty("Content-Type","application/json");
-		connection.setRequestProperty("Accept-Language","en");
-		connection.setRequestProperty("x-supported-image-formats","webp");
+		connection =connectionPropertys(connection);
 		connection.setRequestProperty("X-Auth-Token",api_token);
 		connection.setUseCaches( false );
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
@@ -402,9 +348,41 @@ public class APIMethods {
 	    }
 	    in.close();
 	}
-	///
-	
-	
-	
-	
+	public static void downloadData(String api_token, String timeStamp) throws IOException {
+		String urlParameters  = "{\"last_activity_date\":\""+timeStamp+"\"}";
+		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
+		String request        = "https://api.gotinder.com/updates";
+		URL    url            = new URL( request );
+		HttpURLConnection connection= (HttpURLConnection) url.openConnection();           
+		connection.setDoOutput( true );
+		connection.setInstanceFollowRedirects( false );
+		connection.setRequestMethod( "POST" );
+		connection =connectionPropertys(connection);
+		connection.setRequestProperty("X-Auth-Token",api_token);
+		
+		connection.setUseCaches( false );
+		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+			   wr.write( postData );
+		}
+	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	    String inputLine;
+	    StringBuffer response = new StringBuffer();
+	    while ((inputLine = in.readLine()) != null) {
+	          response.append(inputLine);
+	    }
+	    in.close();
+	    System.out.println( response.toString());
+	    JSONObject jobj = new JSONObject(response.toString());
+	    
+	}
+	public static HttpURLConnection connectionPropertys(HttpURLConnection connection) {
+		connection.setRequestProperty("platform","android");
+		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
+		connection.setRequestProperty("os-version","24");
+		connection.setRequestProperty("app-version","3544");
+		connection.setRequestProperty("Content-Type","application/json");
+		connection.setRequestProperty("Accept-Language","en");
+		connection.setRequestProperty("x-supported-image-formats","webp");
+		return connection;
+	}
 }
