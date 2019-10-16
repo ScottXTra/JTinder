@@ -385,4 +385,5 @@ public class APIMethods {
 		connection.setRequestProperty("x-supported-image-formats","webp");
 		return connection;
 	}
+//
 }
