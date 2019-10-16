@@ -203,7 +203,7 @@ public class APIMethods {
 	        	return false;
 	        }
 	}
-	
+
 	//Swipes right on a given user ID
 	public static boolean swipeRight(String userID,String api_token) throws IOException {
 		 URL obj = new URL("https://api.gotinder.com/like/" + userID);
@@ -279,7 +279,7 @@ public class APIMethods {
 		return user;
 		
 	}
-	
+
 	//Updates tinder location (what is used to find local matches)
 	public static void updateLocation(String api_token,float lat,float lon) throws IOException {
 		String urlParameters  = "{\"lat\":\""+lat+"\",\"lon\": \""+lon+"\", \"force_fetch_resources\":\"true\"}";
@@ -304,7 +304,7 @@ public class APIMethods {
 		}
 	}
 	//Downloads all unblurred likes that are displayed on (likes you) screen in app
-	public static ArrayList<String> getUnbluredLikes(String api_token) throws IOException{
+	public static ArrayList<String> getUnbluredLikes(String api_token, boolean extraPhotos) throws IOException{
 		ArrayList<String> photoUrls = new ArrayList<String>();
 		URL obj = new URL("https://api.gotinder.com/v2/fast-match/teasers");
         HttpURLConnection  connection = (HttpURLConnection) obj.openConnection();
@@ -335,10 +335,73 @@ public class APIMethods {
        	 	JSONObject user = userOBJECT.getJSONObject("user");
        	 	JSONArray photos = user.getJSONArray("photos");
        	 	photoUrls.add(photos.getJSONObject(0).getString("url"));
-       	 	//for (int j = 0; j < photos.length(); j++) {
-       	 		//photoUrls.add(photos.getJSONObject(j).getString("url"));
-       	 	//}
+       	 	if(extraPhotos) {
+       	 		for (int j = 0; j < photos.length(); j++) {
+       	 			photoUrls.add(photos.getJSONObject(j).getString("url"));
+       	 		}
+       	 	}
         }
 		return photoUrls;
 	}
+	public static int getNumberOfLikes(String api_token) throws IOException {
+		URL obj = new URL("https://api.gotinder.com/v2/fast-match/count");
+        HttpURLConnection  connection = (HttpURLConnection) obj.openConnection();
+        connection.setConnectTimeout(1000);
+        connection.setRequestMethod( "GET" );
+        //Request header
+        connection.setRequestProperty("platform","android");
+		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
+		connection.setRequestProperty("os-version","24");
+		connection.setRequestProperty("app-version","3544");
+		connection.setRequestProperty("Content-Type","application/json");
+		connection.setRequestProperty("Accept-Language","en");
+		connection.setRequestProperty("x-supported-image-formats","webp");
+		connection.setRequestProperty("X-Auth-Token",api_token);
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        JSONObject jobj = new JSONObject(response.toString());
+        JSONObject data = jobj.getJSONObject("data");
+        try {        	
+        	return Integer.parseInt(data.get("count").toString());
+        }catch (Exception e){
+        	return 0;
+        }
+		
+	}
+	public static void sendMessage(String api_token, String userID,String yourUserID, String message) throws IOException {
+		String urlParameters  = "{\"message\":\""+message+"\"}";
+		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
+		String request        = "https://api.gotinder.com/user/matches/" + userID+yourUserID;
+		URL    url            = new URL( request );
+		HttpURLConnection connection= (HttpURLConnection) url.openConnection();           
+		connection.setDoOutput( true );
+		connection.setInstanceFollowRedirects( false );
+		connection.setRequestMethod( "POST" );
+		connection.setRequestProperty("platform","android");
+		connection.setRequestProperty("User-Agent","Tinder Android Version 11.0.1");
+		connection.setRequestProperty("os-version","24");
+		connection.setRequestProperty("app-version","3544");
+		connection.setRequestProperty("Content-Type","application/json");
+		connection.setRequestProperty("Accept-Language","en");
+		connection.setRequestProperty("x-supported-image-formats","webp");
+		connection.setRequestProperty("X-Auth-Token",api_token);
+		connection.setUseCaches( false );
+		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+			   wr.write( postData );
+		}
+	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	    String inputLine;
+	    StringBuffer response = new StringBuffer();
+	    while ((inputLine = in.readLine()) != null) {
+	          response.append(inputLine);
+	    }
+	    in.close();
+	}
+	
+	
 }
