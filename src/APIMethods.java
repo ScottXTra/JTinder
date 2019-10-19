@@ -134,6 +134,7 @@ public class APIMethods {
             response.append(inputLine);
         }
         in.close();
+        
         JSONObject jobj = new JSONObject(response.toString());
         JSONObject data = jobj.getJSONObject("data");
         JSONArray results = data.getJSONArray("results");
@@ -151,13 +152,11 @@ public class APIMethods {
         		 JSONObject photo =  photos.getJSONObject(j);
         		 newUser.photoUrls.add(photo.getString("url"));
         	 }
-        	 try {
-        		 newUser.gender = Integer.parseInt(user.getString("gender"));
-        	 }catch(Exception h) {
-        		 newUser.gender = -1;
-        	 }
         	
-        	 newUser.distance = "NULL";
+        	 newUser.gender = Integer.parseInt(user.get("gender").toString());
+
+        	 newUser.distance = userOBJECT.get("distance_mi").toString();
+        	 System.out.println(newUser.gender);
         	 rtnList.add(newUser);
         }
 		return rtnList;
@@ -241,11 +240,9 @@ public class APIMethods {
    		 	JSONObject photo =  photos.getJSONObject(j);
    		 	user.photoUrls.add(photo.getString("url"));
    	 	}
-        try {
-   		 	user.gender = Integer.parseInt(results.getString("gender"));
-   	 	}catch(Exception h) {
-   	 		user.gender = -1;
-   	 	}
+        user.gender = Integer.parseInt(results.get("gender").toString());
+        user.distance = results.get("distance_mi").toString();
+   	 	
 		return user;
 		
 	}
@@ -348,7 +345,9 @@ public class APIMethods {
 	    }
 	    in.close();
 	}
-	public static void downloadData(String api_token, String timeStamp) throws IOException {
+	//NOT FINISHED
+	public static void downloadData(String api_token, String timeStamp,String userID) throws IOException {
+		
 		String urlParameters  = "{\"last_activity_date\":\""+timeStamp+"\"}";
 		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
 		String request        = "https://api.gotinder.com/updates";
@@ -359,7 +358,6 @@ public class APIMethods {
 		connection.setRequestMethod( "POST" );
 		connection =connectionPropertys(connection);
 		connection.setRequestProperty("X-Auth-Token",api_token);
-		
 		connection.setUseCaches( false );
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
 			   wr.write( postData );
@@ -371,9 +369,83 @@ public class APIMethods {
 	          response.append(inputLine);
 	    }
 	    in.close();
-	    System.out.println( response.toString());
 	    JSONObject jobj = new JSONObject(response.toString());
+	    JSONArray matches = jobj.getJSONArray("matches");
+	    for (int i = 0; i < matches.length(); i++) {
+	    	JSONObject convoObj = matches.getJSONObject(i);
+	    	if(convoObj.getString("_id").contains(userID)) {
+	    		JSONArray messageArray = convoObj.getJSONArray("messages");
+	    		 for (int j = 0; j < messageArray.length(); j++) {
+	    			 JSONObject messageObj = messageArray.getJSONObject(j);
+	    			 System.out.println(messageObj.getString("message"));
+	    		 }
+	    	}
+	    }
 	    
+	}
+	//NOT FINISHED
+	public static void sendGifMessage(String api_token, String userID,String yourUserID, String message) throws IOException {
+		String urlParameters  = "{\"message\": \"https://media2.giphy.com/media/HCTfYH2Xk5yw/giphy.gif?cid=&rid=gdiphy.gif\" , \"type\": \"gif\" , \"gif_id\": \"HCTfYH2Xk5yw\"}";
+		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
+		String request        = "https://api.gotinder.com/user/matches/" + userID+yourUserID;
+		URL    url            = new URL( request );
+		HttpURLConnection connection= (HttpURLConnection) url.openConnection();           
+		connection.setDoOutput( true );
+		connection.setInstanceFollowRedirects( false );
+		connection.setRequestMethod( "POST" );
+		connection =connectionPropertys(connection);
+		connection.setRequestProperty("X-Auth-Token",api_token);
+		connection.setUseCaches( false );
+		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+			   wr.write( postData );
+		}
+	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	    String inputLine;
+	    StringBuffer response = new StringBuffer();
+	    while ((inputLine = in.readLine()) != null) {
+	          response.append(inputLine);
+	    }
+	    in.close();
+	}
+	
+	public static ArrayList<userData> getTopPicks(String api_token) throws IOException {
+		URL obj = new URL("https://api.gotinder.com/v2/top-picks/preview");
+        HttpURLConnection  connection = (HttpURLConnection) obj.openConnection();
+        connection.setConnectTimeout(1000);
+        connection.setRequestMethod( "GET" );
+        //Request header
+        connection =connectionPropertys(connection);
+		connection.setRequestProperty("X-Auth-Token",api_token);
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        //System.out.println(response.toString());
+        JSONObject jobj = new JSONObject(response.toString());
+        JSONObject data = jobj.getJSONObject("data");
+        JSONArray results = data.getJSONArray("results");
+        ArrayList<userData> rtn = new ArrayList<userData>();
+        for (int j = 0; j <  results.length(); j++) {
+        	userData tmpUser = new userData();
+        	JSONObject userElement =  results.getJSONObject(j);
+        	JSONObject userObject = userElement.getJSONObject("user");
+        	tmpUser.longId = userObject.getString("_id");
+        	tmpUser.bio = userObject.getString("bio");
+        	tmpUser.birthDay = userObject.getString("birth_date");
+        	tmpUser.name = userObject.getString("name");
+        	JSONArray photos = userObject.getJSONArray("photos");
+            for (int i = 0; i <  photos.length(); i++) {
+            	JSONObject photo =  photos.getJSONObject(i);
+            	tmpUser.photoUrls.add(photo.getString("url"));
+       	 	}
+            tmpUser.gender = Integer.parseInt(userObject.get("gender").toString());
+            tmpUser.distance = userElement.get("distance_mi").toString();
+            rtn.add(tmpUser);
+   	 	}
+		return rtn;
 	}
 	public static HttpURLConnection connectionPropertys(HttpURLConnection connection) {
 		connection.setRequestProperty("platform","android");
@@ -385,5 +457,4 @@ public class APIMethods {
 		connection.setRequestProperty("x-supported-image-formats","webp");
 		return connection;
 	}
-
 }
