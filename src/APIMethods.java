@@ -428,7 +428,36 @@ public class APIMethods {
 		}
 		StringBuffer response = chonkReducer(connection);
 	}
-    //COMMON CODE
+    //Returns true if the super like is accepted eg ( You have not used your free daily)
+	public static boolean superLike(String api_token,String userID) throws IOException {
+    	String urlParameters  = "";
+		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
+		String request        = "https://api.gotinder.com/like/" + userID + "/super?photoId=&s_number=";
+		URL    url            = new URL( request );
+		HttpURLConnection connection= (HttpURLConnection) url.openConnection();           
+		connection.setDoOutput( true );
+		connection.setInstanceFollowRedirects( false );
+		connection.setRequestMethod( "POST" );
+		connection =connectionPropertys(connection);
+		connection.setRequestProperty("X-Auth-Token",api_token);
+		connection.setUseCaches( false );
+		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+			   wr.write( postData );
+		}
+		StringBuffer response = chonkReducer(connection);
+		System.out.println(response.toString());
+		JSONObject jobj = new JSONObject(response.toString());
+		try {
+			if(jobj.getString("limit_exceeded").equals("true")) {
+				return false;
+			}else {
+				return true;
+			}
+		}catch (Exception e){
+			return true;
+		}
+    }
+	//COMMON CODE
 	public static StringBuffer chonkReducer(HttpURLConnection connection) throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;
