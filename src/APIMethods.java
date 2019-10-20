@@ -346,8 +346,7 @@ public class APIMethods {
 	    in.close();
 	}
 	//NOT FINISHED
-	public static void downloadData(String api_token, String timeStamp,String userID) throws IOException {
-		
+	public static ArrayList<messageObject> getMessagesFrom(String api_token, String timeStamp,String userID) throws IOException {
 		String urlParameters  = "{\"last_activity_date\":\""+timeStamp+"\"}";
 		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
 		String request        = "https://api.gotinder.com/updates";
@@ -369,19 +368,29 @@ public class APIMethods {
 	          response.append(inputLine);
 	    }
 	    in.close();
+	    //System.out.println(response.toString());
 	    JSONObject jobj = new JSONObject(response.toString());
 	    JSONArray matches = jobj.getJSONArray("matches");
+	    ArrayList<messageObject> rtnMessageOb = new ArrayList<messageObject>();
 	    for (int i = 0; i < matches.length(); i++) {
 	    	JSONObject convoObj = matches.getJSONObject(i);
 	    	if(convoObj.getString("_id").contains(userID)) {
 	    		JSONArray messageArray = convoObj.getJSONArray("messages");
 	    		 for (int j = 0; j < messageArray.length(); j++) {
 	    			 JSONObject messageObj = messageArray.getJSONObject(j);
-	    			 System.out.println(messageObj.getString("message"));
+	    			 messageObject tmpMsg = new messageObject();
+	    			 tmpMsg.messageID = messageObj.getString("_id");
+	    			 tmpMsg.matchID = messageObj.getString("match_id");
+	    			 tmpMsg.sentDate = messageObj.getString("sent_date");
+	    			 tmpMsg.message = messageObj.getString("message");
+	    			 tmpMsg.messageTo = messageObj.getString("to");
+	    			 tmpMsg.messageFrom = messageObj.getString("from");
+	    			 tmpMsg.timeStamp = Long.parseLong(messageObj.get("timestamp").toString());
+	    			 rtnMessageOb.add(tmpMsg);
 	    		 }
 	    	}
-	    }
-	    
+	    } 
+	    return rtnMessageOb;
 	}
 	//NOT FINISHED
 	public static void sendGifMessage(String api_token, String userID,String yourUserID, String message) throws IOException {
@@ -407,7 +416,7 @@ public class APIMethods {
 	    }
 	    in.close();
 	}
-	
+
 	public static ArrayList<userData> getTopPicks(String api_token) throws IOException {
 		URL obj = new URL("https://api.gotinder.com/v2/top-picks/preview");
         HttpURLConnection  connection = (HttpURLConnection) obj.openConnection();
