@@ -33,13 +33,8 @@ public class APIMethods {
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
 			   wr.write( postData );
 		}
-	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	    String inputLine;
-	    StringBuffer response = new StringBuffer();
-	    while ((inputLine = in.readLine()) != null) {
-	          response.append(inputLine);
-	    }
-	    in.close();
+	   
+	    StringBuffer response = chonkReducer(connection);
 	    JSONObject jobj = new JSONObject(response.toString());
 	    try {
 	    	jobj.getJSONObject("data").get("sms_sent").toString().equals("true");
@@ -68,13 +63,7 @@ public class APIMethods {
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
 			   wr.write( postData );
 		}
-	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	    String inputLine;
-	    StringBuffer response = new StringBuffer();
-	    while ((inputLine = in.readLine()) != null) {
-	          response.append(inputLine);
-	    }
-	    in.close();
+		StringBuffer response = chonkReducer(connection);
 	    JSONObject jobj = new JSONObject(response.toString());
 	   
 	    try {
@@ -99,13 +88,7 @@ public class APIMethods {
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
 			   wr.write( postData );
 		}
-	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	    String inputLine;
-	    StringBuffer response = new StringBuffer();
-	    while ((inputLine = in.readLine()) != null) {
-	          response.append(inputLine);
-	    }
-	    in.close();
+		StringBuffer response = chonkReducer(connection);
 	    JSONObject jobj = new JSONObject(response.toString());
 	   
 	    try {
@@ -274,13 +257,7 @@ public class APIMethods {
         //Request header
         connection =connectionPropertys(connection);
 		connection.setRequestProperty("X-Auth-Token",api_token);
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
+		StringBuffer response = chonkReducer(connection);
         JSONObject jobj = new JSONObject(response.toString());
         JSONObject data = jobj.getJSONObject("data");
         JSONArray results = data.getJSONArray("results");
@@ -337,16 +314,10 @@ public class APIMethods {
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
 			   wr.write( postData );
 		}
-	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	    String inputLine;
-	    StringBuffer response = new StringBuffer();
-	    while ((inputLine = in.readLine()) != null) {
-	          response.append(inputLine);
-	    }
-	    in.close();
+		StringBuffer response = chonkReducer(connection);
 	}
-	//NOT FINISHED
-	public static ArrayList<messageObject> getMessagesFrom(String api_token, String timeStamp,String userID) throws IOException {
+	
+	public static ArrayList<messageObject> getConversation(String api_token, String timeStamp,String userID) throws IOException {
 		String urlParameters  = "{\"last_activity_date\":\""+timeStamp+"\"}";
 		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
 		String request        = "https://api.gotinder.com/updates";
@@ -361,13 +332,7 @@ public class APIMethods {
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
 			   wr.write( postData );
 		}
-	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	    String inputLine;
-	    StringBuffer response = new StringBuffer();
-	    while ((inputLine = in.readLine()) != null) {
-	          response.append(inputLine);
-	    }
-	    in.close();
+		StringBuffer response = chonkReducer(connection);
 	    //System.out.println(response.toString());
 	    JSONObject jobj = new JSONObject(response.toString());
 	    JSONArray matches = jobj.getJSONArray("matches");
@@ -408,13 +373,7 @@ public class APIMethods {
 		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
 			   wr.write( postData );
 		}
-	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	    String inputLine;
-	    StringBuffer response = new StringBuffer();
-	    while ((inputLine = in.readLine()) != null) {
-	          response.append(inputLine);
-	    }
-	    in.close();
+		StringBuffer response = chonkReducer(connection);
 	}
 
 	public static ArrayList<userData> getTopPicks(String api_token) throws IOException {
@@ -425,13 +384,7 @@ public class APIMethods {
         //Request header
         connection =connectionPropertys(connection);
 		connection.setRequestProperty("X-Auth-Token",api_token);
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
+		StringBuffer response = chonkReducer(connection);
         //System.out.println(response.toString());
         JSONObject jobj = new JSONObject(response.toString());
         JSONObject data = jobj.getJSONObject("data");
@@ -455,6 +408,36 @@ public class APIMethods {
             rtn.add(tmpUser);
    	 	}
 		return rtn;
+	}
+	//NO PARAMETER FOR GENDER YET ALWAYS SETS TO SEARCHING FOR WOMEN!
+	public static void setPrefrences(String api_token, int minAge,int maxAge,boolean discoverable, int maxDistance) throws IOException {
+		String urlParameters  = "{\"age_filter_min\":"+minAge+" , \"age_filter_max\":"+maxAge+" , \"discoverable\":"+discoverable+" , \"distance_filter\":"+maxDistance+", \"show_same_orientation_first\":{} , \"interested_in\":[1]} ";
+		System.out.println(urlParameters);
+		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
+		String request        = "https://api.gotinder.com/v2/profile/user";
+		URL    url            = new URL( request );
+		HttpURLConnection connection= (HttpURLConnection) url.openConnection();           
+		connection.setDoOutput( true );
+		connection.setInstanceFollowRedirects( false );
+		connection.setRequestMethod( "POST" );
+		connection =connectionPropertys(connection);
+		connection.setRequestProperty("X-Auth-Token",api_token);
+		connection.setUseCaches( false );
+		try( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+			   wr.write( postData );
+		}
+		StringBuffer response = chonkReducer(connection);
+	}
+    //COMMON CODE
+	public static StringBuffer chonkReducer(HttpURLConnection connection) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+		return response;
 	}
 	public static HttpURLConnection connectionPropertys(HttpURLConnection connection) {
 		connection.setRequestProperty("platform","android");
