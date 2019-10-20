@@ -9,9 +9,9 @@ Project Discription: I proxied the tinder app to find the endpoints and protocol
 <p>Change Current Location</p>
 <p>Send Message To User ID</p>
 <p>Download unblurred photos of people that "like" you</p>
+<p>Get Messages From User ID</p>
 <h1>Planned Features</h1>
 <p>Login With Facebook</p>
-<p>Get Messages From User ID</p>
 <p>Unmatch User ID</p>
 <p>Get Your Profile Data</p>
 <p>Super Like</p>
