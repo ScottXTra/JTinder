@@ -7,10 +7,10 @@ Project Discription: I proxied the tinder app to find the endpoints and protocol
 <p>Swipe Left</p>
 <p>Swipe Right</p>
 <p>Change Current Location</p>
-<p>Send Message To User ID</p>
+<p>Send Message To User</p>
 <p>Download unblurred photos of people that "like" you</p>
-<p>Get Messages From User ID</p>
-<p>Super Like</p>
+<p>Get Messages From User</p>
+<p>Super Like A User</p>
 <p>Get Number Of Likes You Have Received</p>
 <p>Set Search Preferences</p>
 <h1>Planned Features</h1>
