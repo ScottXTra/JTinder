@@ -15,6 +15,7 @@ Project Discription: I proxied the tinder app to find the endpoints and protocol
 <p>Set Search Preferences</p>
 <h1>Planned Features</h1>
 <p>Login With Facebook</p>
+<p>Ability To Send Photo Messages (I have a work around)</p>
 <p>Unmatch User ID</p>
 <p>Get Your Profile Data</p>
 <h1>Working POC (Oct 13th 2019)</h1>
